@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auction-monitor
+  namespace: auction-monitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auction-monitor
+  template:
+    metadata:
+      labels:
+        app: auction-monitor
+    spec:
+      containers:
+        - name: auction-monitor
+          image: localhost:5001/auction-monitor:dev
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: auction-monitor-env
+          env:
+            - name: LOG_LEVEL
+              value: INFO
+            - name: SOCKS5_PROXY_URL
+              value: socks5://nordlynx.nordlynx.svc.cluster.local:1080
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+              readOnly: true
+            - name: logs
+              mountPath: /app/logs
+      volumes:
+        - name: config
+          configMap:
+            name: auction-monitor-config
+        - name: logs
+          persistentVolumeClaim:
+            claimName: auction-monitor-logs

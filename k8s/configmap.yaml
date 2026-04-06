@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auction-monitor-config
+  namespace: auction-monitor
+data:
+  config.yaml: |
+    scraper:
+      baseUrl: "https://nellisauction.com/search?Location+Name=Delran"
+      requestDelaySeconds: 7
+      pageLoadTimeoutSeconds: 30
+      headless: true
+      maxPages: 200
+      locationCode: "phi"
+      categories: []
+
+    scheduler:
+      runTime: "09:00"
+      timezone: "America/New_York"
+      skipScheduleInDebug: false
+
+    email:
+      smtpServer: "smtp.gmail.com"
+      smtpPort: 587
+      useTLS: true
+      fromEmail: ""
+      password: ""
+      recipientEmail: ""
+      subjectTemplate: "Nellis Auction - New Listings Found: {count} Items"
+
+    filters:
+      minStarRating: 4
+      maxStarRating: 5
+      minEstimatedRetailPrice: 50
+
+    logging:
+      level: "INFO"
+      logDir: "logs"
+      maxLogSizeBytes: 10485760
+      backupCount: 5
+
+    data:
+      seenListingsFile: "data/seen_listings.json"
+
+  keywords.yaml: |
+    keywords:
+      - nas drive
+      - robot vacuum and mop
+      - robot vacuum
+      - robot mop
+      - pergola
+      - surround sound system
+      - home theater system
+      - 3d printer
+      - hard drives
+      - shoe storage
