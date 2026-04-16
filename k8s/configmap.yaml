@@ -10,14 +10,14 @@ data:
       requestDelaySeconds: 7
       pageLoadTimeoutSeconds: 30
       headless: true
-      maxPages: 200
+      maxPages: 10
       locationCode: "phi"
       categories: []
 
     scheduler:
       runTime: "09:00"
       timezone: "America/New_York"
-      skipScheduleInDebug: false
+      skipScheduleInDebug: true
 
     email:
       smtpServer: "smtp.gmail.com"
@@ -34,7 +34,7 @@ data:
       minEstimatedRetailPrice: 50
 
     logging:
-      level: "INFO"
+      level: "DEBUG"
       logDir: "logs"
       maxLogSizeBytes: 10485760
       backupCount: 5
@@ -54,3 +54,4 @@ data:
       - 3d printer
       - hard drives
       - shoe storage
+      - air conditioner

@@ -58,6 +58,9 @@ class EmailNotifier:
                 logger.warning("No listings to send notification for")
                 return False
             
+            with_images = sum(1 for l in listings if l.get('image_url'))
+            logger.info(f"Sending notification: {len(listings)} listings, {with_images} with images")
+
             # Create email
             subject = self.subject_template.format(count=len(listings))
             html_body = self._generate_html_body(listings)
@@ -184,20 +187,34 @@ class EmailNotifier:
         rating_stars = '⭐' * rating if rating > 0 else 'Not rated'
         keywords_html = ', '.join(f'<strong>{kw}</strong>' for kw in matched_keywords) if matched_keywords else 'N/A'
 
-        image_html = ""
         if image_url:
-            image_html = f'<img src="{image_url}" style="max-width: 100px; max-height: 100px; margin-bottom: 10px;">'
+            logger.debug(f"Image URL for '{title}': {image_url}")
+            image_cell = f"""
+                <td style="width:200px; min-width:200px; vertical-align:top; padding-right:15px;">
+                    <a href="{url}" target="_blank">
+                        <img src="{image_url}" width="200"
+                             style="display:block; width:200px; max-height:200px; object-fit:contain; border-radius:4px; border:1px solid #ddd;">
+                    </a>
+                </td>"""
+        else:
+            image_cell = ""
 
         return f"""
         <div class="listing-item">
-            {image_html}
-            <div class="listing-title">{title}</div>
-            <div class="listing-details">
-                <div class="listing-detail"><span class="label">Price:</span> <span class="price">{price}</span></div>
-                <div class="listing-detail"><span class="label">Est. Retail:</span> ${estimated_retail}</div>
-                <div class="listing-detail"><span class="label">Keywords:</span> {keywords_html}</div>
-                <div class="listing-detail"><span class="label">Rating:</span> <span class="rating">{rating_stars}</span></div>
-            </div>
-            <div class="link"><a href="{url}" target="_blank">View Listing</a></div>
+            <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+                <tr>
+                    {image_cell}
+                    <td style="vertical-align:top;">
+                        <div class="listing-title">{title}</div>
+                        <div class="listing-details">
+                            <div class="listing-detail"><span class="label">Price:</span> <span class="price">{price}</span></div>
+                            <div class="listing-detail"><span class="label">Est. Retail:</span> ${estimated_retail}</div>
+                            <div class="listing-detail"><span class="label">Keywords:</span> {keywords_html}</div>
+                            <div class="listing-detail"><span class="label">Rating:</span> <span class="rating">{rating_stars}</span></div>
+                        </div>
+                        <div class="link"><a href="{url}" target="_blank">View Listing</a></div>
+                    </td>
+                </tr>
+            </table>
         </div>
         """

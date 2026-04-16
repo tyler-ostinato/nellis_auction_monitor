@@ -328,6 +328,14 @@ class AuctionScraper:
                 location = item.get('location')
                 location_name = location.get('name', '') if isinstance(location, dict) else str(location or '')
 
+                # Photos are in a 'photos' array; take the first entry's 'url' field
+                photos = item.get('photos')
+                image_url = ''
+                if isinstance(photos, list) and photos:
+                    first_photo = photos[0]
+                    if isinstance(first_photo, dict):
+                        image_url = first_photo.get('url') or first_photo.get('fullPath') or ''
+
                 listing = {
                     'id': str(url_id) if url_id else '',
                     'title': item.get('title', '') or item.get('name', ''),
@@ -341,6 +349,7 @@ class AuctionScraper:
                     'is_closed': item.get('isClosed', False),
                     'market_status': item.get('marketStatus', ''),
                     'category': item.get('category', '') or item.get('categoryName', ''),
+                    'image_url': str(image_url) if image_url else '',
                 }
 
                 if listing['title']:
