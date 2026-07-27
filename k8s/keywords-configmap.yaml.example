@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auction-monitor-keywords
+  namespace: auction-monitor
+data:
+  keywords.yaml: |
+    keywords:
+      - example keyword

@@ -50,3 +50,6 @@ data/*.json
 
 # Claude Code
 .claude/
+
+# Personal keyword list (structure kept in k8s/keywords-configmap.yaml.example)
+k8s/keywords-configmap.yaml

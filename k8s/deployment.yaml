@@ -33,8 +33,12 @@ spec:
               mountPath: /app/logs
       volumes:
         - name: config
-          configMap:
-            name: auction-monitor-config
+          projected:
+            sources:
+              - configMap:
+                  name: auction-monitor-config
+              - configMap:
+                  name: auction-monitor-keywords
         - name: logs
           persistentVolumeClaim:
             claimName: auction-monitor-logs

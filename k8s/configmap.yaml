@@ -41,17 +41,3 @@ data:
 
     data:
       seenListingsFile: "data/seen_listings.json"
-
-  keywords.yaml: |
-    keywords:
-      - nas drive
-      - robot vacuum and mop
-      - robot vacuum
-      - robot mop
-      - pergola
-      - surround sound system
-      - home theater system
-      - 3d printer
-      - hard drives
-      - shoe storage
-      - air conditioner
