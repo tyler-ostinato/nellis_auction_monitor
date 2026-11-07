@@ -234,6 +234,18 @@ class AuctionScraper:
                 return null;
             }
 
+            // React Router v7 (Nellis migrated off Remix): client data router state
+            if (window.__reactRouterDataRouter && window.__reactRouterDataRouter.state && window.__reactRouterDataRouter.state.loaderData) {
+                const found = extractFromLoaderData(window.__reactRouterDataRouter.state.loaderData);
+                if (found) return found;
+            }
+
+            // React Router v7 SSR context
+            if (window.__reactRouterContext && window.__reactRouterContext.state && window.__reactRouterContext.state.loaderData) {
+                const found = extractFromLoaderData(window.__reactRouterContext.state.loaderData);
+                if (found) return found;
+            }
+
             // Remix v2+Vite: client router state (populated after navigation, takes priority)
             if (window.__remixRouter && window.__remixRouter.state && window.__remixRouter.state.loaderData) {
                 const found = extractFromLoaderData(window.__remixRouter.state.loaderData);
@@ -262,7 +274,7 @@ class AuctionScraper:
             }
 
             // Log available window keys to aid debugging
-            const remixKeys = Object.keys(window).filter(k => k.startsWith('__remix'));
+            const remixKeys = Object.keys(window).filter(k => k.startsWith('__remix') || k.startsWith('__reactRouter'));
             return { debug: remixKeys };
         }''')
 
